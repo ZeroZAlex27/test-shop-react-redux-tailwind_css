@@ -4,10 +4,10 @@ import { productsApi } from "../redux/services/product.service";
 
 const ProductItem = ({ product }) => {
     const [deleteProduct, {}] = productsApi.useDeleteProductMutation();
-    const { storedValue, setStoredValue } = useLocalStorage();
+    const { updateModalVisible, setupdateModalVisible } = useLocalStorage();
 
     const handleUpdate = () => {
-        setStoredValue(true);
+        setupdateModalVisible(true);
     };
 
     const handleRemove = () => {

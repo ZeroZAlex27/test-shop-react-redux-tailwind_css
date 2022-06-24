@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export function useLocalStorage() {
-    const [storedValue, setStoredValue] = useState(true);
-    return { storedValue, setStoredValue };
+    const [createModalVisible, setCreateModalVisible] = useState(true);
+    const [updateModalVisible, setupdateModalVisible] = useState(false);
+    return { createModalVisible, setCreateModalVisible, updateModalVisible, setupdateModalVisible };
 }
