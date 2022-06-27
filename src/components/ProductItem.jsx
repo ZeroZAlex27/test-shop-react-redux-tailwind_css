@@ -1,13 +1,15 @@
 import React from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useDispatch } from "react-redux";
 import { productsApi } from "../redux/services/product.service";
+import { setProductId, setUpdateModalVisible } from "../redux/slices/modalsSlice";
 
 const ProductItem = ({ product }) => {
+    const dispatch = useDispatch();
     const [deleteProduct, {}] = productsApi.useDeleteProductMutation();
-    const { updateModalVisible, setupdateModalVisible } = useLocalStorage();
 
     const handleUpdate = () => {
-        setupdateModalVisible(true);
+        dispatch(setUpdateModalVisible(true));
+        dispatch(setProductId(product.id));
     };
 
     const handleRemove = () => {

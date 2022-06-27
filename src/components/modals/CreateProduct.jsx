@@ -1,24 +1,26 @@
 import React, { useState } from "react";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useDispatch, useSelector } from "react-redux";
 import { productsApi } from "../../redux/services/product.service";
+import { setCreateModalVisible } from "../../redux/slices/modalsSlice";
 
 const CreateProduct = () => {
+    const dispath = useDispatch();
     const [createProduct, {}] = productsApi.useCreateProductMutation();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const { createModalVisible, setCreateModalVisible } = useLocalStorage();
+    const modalVisible = useSelector((state) => state.modals.createModalVisible);
 
     const handleCreate = async () => {
         await createProduct({ title, description }).then(() => {
             setTitle("");
             setDescription("");
-            setCreateModalVisible(false);
+            dispath(() => setCreateModalVisible(false));
         });
     };
 
     return (
         <>
-            {createModalVisible ? (
+            {modalVisible ? (
                 <div className="backdrop-blur-md justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                     <div className="relative w-auto my-6 mx-auto max-w-3xl">
                         <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -55,7 +57,7 @@ const CreateProduct = () => {
                                         <button
                                             className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                             type="button"
-                                            onClick={() => setCreateModalVisible(false)}
+                                            onClick={() => dispath(setCreateModalVisible(false))}
                                         >
                                             Закрыть
                                         </button>

@@ -1,24 +1,28 @@
 import React, { useState } from "react";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useDispatch, useSelector } from "react-redux";
 import { productsApi } from "../../redux/services/product.service";
+import { setProductId, setUpdateModalVisible } from "../../redux/slices/modalsSlice";
 
 const UpdateProduct = () => {
+    const dispatch = useDispatch();
     const [updateProduct, {}] = productsApi.useUpdateProductMutation();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const { updateModalVisible, setupdateModalVisible } = useLocalStorage();
+    const modalVisible = useSelector((state) => state.modals.updateModalVisible);
+    const productId = useSelector((state) => state.modals.productId);
 
     const handleUpdate = async () => {
-        await updateProduct({ title, description }).then(() => {
+        await updateProduct({ productId, title, description }).then(() => {
             setTitle("");
             setDescription("");
-            setupdateModalVisible();
+            dispatch(setProductId(null));
+            dispatch(setUpdateModalVisible(false));
         });
     };
 
     return (
         <>
-            {updateModalVisible ? (
+            {modalVisible ? (
                 <div className="backdrop-blur-md justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
                     <div className="relative w-auto my-6 mx-auto max-w-3xl">
                         <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
@@ -55,7 +59,7 @@ const UpdateProduct = () => {
                                         <button
                                             className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                             type="button"
-                                            onClick={() => setupdateModalVisible(false)}
+                                            onClick={() => dispatch(setUpdateModalVisible(false))}
                                         >
                                             Закрыть
                                         </button>

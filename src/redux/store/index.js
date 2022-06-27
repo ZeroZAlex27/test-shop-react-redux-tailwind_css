@@ -1,7 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { productsApi } from "../services/product.service";
+import modalsReducer from "../slices/modalsSlice";
 
 const reducer = {
+    modals: modalsReducer,
     [productsApi.reducerPath]: productsApi.reducer,
 };
 
